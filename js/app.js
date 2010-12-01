@@ -37,6 +37,8 @@ var CG = {
 
         url = "proxy.php?url="+escape(url);
 
+        $("#loading").show("slide",{ direction: "up" },500);
+
         $.get(url,function(results){
 
             CG.features = [];
@@ -63,11 +65,12 @@ var CG = {
                         )
                     );
 
+              
+            });
+            if (CG.features.length)
+                CG.mapResults();
 
-                if (CG.features.length)
-                    CG.mapResults();
-
-            })
+           $("#loading").hide("slide",{ direction: "up" },500);
         })
 
         return true;
@@ -279,6 +282,7 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 
 $(document).ready(function(){
 
+    // Register events
     $("#radius").change(function(){
         CG.radius = $(this).val()
     });
@@ -288,6 +292,11 @@ $(document).ready(function(){
     $("#recenter").change(function(){
         CG.centerOnResults = (this.checked)
     });
+
+    // Set map div size
+    $("#loading").css("left",$(window).width()/2 - $("#loading").width()/2);
+    
+    
 
 
     // Set map div size
