@@ -14,7 +14,7 @@ var CG = {
 
     numResults: 10,
 
-    centerOnResults: true,
+    centerOnResults: false,
 
     // x and y should be in lat/lon
     doRequest: function(x,y){
@@ -121,6 +121,17 @@ var CG = {
         CG.map.removePopup(event.feature.popup);
         event.feature.popup.destroy();
         event.feature.popup = null;
+    },
+
+    onDragComplete: function(feature,pixel){
+        var lonlat = this.map.getLonLatFromViewPortPx(pixel);
+
+        // Transform the coordinates from Spherical Mercator to Lat/lon (WGS84)
+        lonlat.transform(
+            CG.map.getProjectionObject(),
+            new OpenLayers.Projection("EPSG:4326"));
+
+        CG.doRequest(lonlat.lon, lonlat.lat);
     },
 
     getFeatureStyles: function(){
@@ -239,10 +250,24 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
             return false;
 
         var lonlat = this.map.getLonLatFromViewPortPx(e.xy);
+
+
+        // Add Marker
+        var marker = CG.markerLayer.features[0];
+        if (marker){
+            // Move the existing marker
+            marker.move(lonlat);
+        } else {
+            // Create a new marker
+            marker = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+            CG.markerLayer.addFeatures([marker]);
+        }
+
         // Transform the coordinates from Spherical Mercator to Lat/lon (WGS84)
         lonlat.transform(
             CG.map.getProjectionObject(),
             new OpenLayers.Projection("EPSG:4326"));
+
         CG.doRequest(lonlat.lon, lonlat.lat);
 
         return true;
@@ -254,9 +279,15 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 
 $(document).ready(function(){
 
-    $("#radius").change(function(){ CG.radius = $(this).val() });
-    $("#num_results").change(function(){ CG.numResults = $(this).val() });
-    $("#recenter").change(function(){ CG.centerOnResults = (this.checked) });
+    $("#radius").change(function(){
+        CG.radius = $(this).val()
+    });
+    $("#num_results").change(function(){
+        CG.numResults = $(this).val()
+    });
+    $("#recenter").change(function(){
+        CG.centerOnResults = (this.checked)
+    });
 
 
     // Set map div size
@@ -279,35 +310,44 @@ $(document).ready(function(){
 
     // Create layers to add
     var layers = [
-        osm = new OpenLayers.Layer.OSM("Simple OSM Map"),
-        gsat = new OpenLayers.Layer.Google("Google Satellite",
-        {
-            type: google.maps.MapTypeId.SATELLITE,
-            numZoomLevels: 22
-        }
-        ),
-        vectors = new OpenLayers.Layer.Vector("Results",{
-            projection: new OpenLayers.Projection("EPSG:4326"),
-            styleMap: CG.getFeatureStyles()
+    osm = new OpenLayers.Layer.OSM("Simple OSM Map"),
+    gsat = new OpenLayers.Layer.Google("Google Satellite",
+    {
+        type: google.maps.MapTypeId.SATELLITE,
+        numZoomLevels: 22
+    }
+    ),
+    vectors = new OpenLayers.Layer.Vector("Results",{
+        projection: new OpenLayers.Projection("EPSG:4326"),
+        styleMap: CG.getFeatureStyles()
+    }),
+    marker = new OpenLayers.Layer.Vector("Marker",{
+        projection: new OpenLayers.Projection("EPSG:4326"),
+        styleMap: new OpenLayers.StyleMap({
+            externalGraphic:'./img/marker.png',
+            graphicWidth:12,
+            graphicHeight:20
         })
+    })
     ];
+    map.addLayers(layers);
 
-    // We will need a reference to the vector layer
+    // We will need a reference to the vector and marker layers
     CG.featuresLayer = vectors;
+    CG.markerLayer = marker;
 
     // Create a control to allow the selection of features
     CG.selectControl = new OpenLayers.Control.SelectFeature(
-        vectors,
+        [vectors,marker],
         {
             "hover": false,
             "multiple": false
         }
         );
     map.addControl(CG.selectControl);
-    CG.selectControl.activate();
     vectors.events.register("featureselected",this,CG.onFeatureSelect);
     vectors.events.register("featureunselected",this,CG.onFeatureUnselect);
-
+    CG.selectControl.activate();
 
     // Create an instance of the custom control that will handle the clicks
     // on the map
@@ -315,8 +355,13 @@ $(document).ready(function(){
     map.addControl(click);
     click.activate();
 
+    // Create a control to drag the marker
+    var drag = new OpenLayers.Control.DragFeature(
+        marker,
+        {onComplete: CG.onDragComplete});
+    map.addControl(drag);
+    drag.activate();
 
-    map.addLayers(layers);
 
     map.setCenter(
         new OpenLayers.LonLat(-1.613616943359375, 54.99337311367353).transform(
