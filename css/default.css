@@ -39,6 +39,26 @@ body{
     margin: 5px 0;
 }
 
+.popup .type{
+    font-size: small;
+    font-style: italic;
+    border-bottom: 1px solid #e7e7e7;
+    margin-bottom: 20px
+}
+
 .popup .name{
     font-weight: bold
+}
+
+.popup .distance{
+    font-size: small;
+    font-style: italic;
+    margin-top: 30px
+}
+
+
+/* OpenLayers classes */
+
+.olPopupCloseBox  {
+    background: url("../img/close.png") no-repeat scroll 0 0 transparent !important;
 }

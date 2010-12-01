@@ -60,7 +60,10 @@ var CG = {
                             {
                             "name": $(this).find("str[name=dc.title]").text(),
                             "address": $(this).find("str[name=institution_address]").text(),
-                            "type": $(this).find("str[name=institution_sector]").text()
+                            "type": $(this).find("str[name=institution_sector]").text(),
+                            "website": $(this).find("str[name=oai_is.website]").text(),
+                            "distance": $(this).find("str[name=geo_distance]").text()
+
                         }
                         )
                     );
@@ -100,8 +103,12 @@ var CG = {
         CG.selectedFeature = feature;
 
         var html = "<div class=\"popup\">";
+        html += (feature.attributes.type) ? "<div class=\"type\">" +  feature.attributes.type + "</div>" : "<div class=\"type\">Unknown</div>" ;
         html += "<div class=\"name\">" + feature.attributes.name +"</div>";
         html += "<div class=\"address\">" + feature.attributes.address+"</div>"
+
+        html += "<div class=\"website\"><a href=\"" + feature.attributes.website + "\" target=\"_blank\">" + feature.attributes.website +"</a></div>"
+        html += "<div class=\"distance\">Distance: " + parseFloat(feature.attributes.distance).toFixed(2)+" miles</div>"
         html += "</div>"
 
         var popup = new OpenLayers.Popup.FramedCloud("Feature Info",
