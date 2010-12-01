@@ -137,7 +137,7 @@ var CG = {
                     value: "Libraries"
                 }),
                 symbolizer: {
-                    externalGraphic:'http://localhost/culturegrid/img/icons/library.png'
+                    externalGraphic:'./img/icons/library.png'
                 }
             }),
             new OpenLayers.Rule({
@@ -147,7 +147,7 @@ var CG = {
                     value: "Museums"
                 }),
                 symbolizer: {
-                    externalGraphic:'http://localhost/culturegrid/img/icons/museum.png'
+                    externalGraphic:'./img/icons/museum.png'
                 }
             }),
             new OpenLayers.Rule({
@@ -157,7 +157,7 @@ var CG = {
                     value: "Research Institutes"
                 }),
                 symbolizer: {
-                    externalGraphic:'http://localhost/culturegrid/img/icons/research.png'
+                    externalGraphic:'./img/icons/research.png'
                 }
             }),
             new OpenLayers.Rule({
@@ -167,7 +167,7 @@ var CG = {
                     value: "Cross-domain Institutions"
                 }),
                 symbolizer: {
-                    externalGraphic:'http://localhost/culturegrid/img/icons/crossdomain.png'
+                    externalGraphic:'./img/icons/crossdomain.png'
                 }
             }),
             new OpenLayers.Rule({
@@ -177,7 +177,7 @@ var CG = {
                     value: "Media"
                 }),
                 symbolizer: {
-                    externalGraphic:'http://localhost/culturegrid/img/icons/media.png'
+                    externalGraphic:'./img/icons/media.png'
                 }
             }),
             new OpenLayers.Rule({
@@ -187,13 +187,13 @@ var CG = {
                     value: "Archives"
                 }),
                 symbolizer: {
-                    externalGraphic:'http://localhost/culturegrid/img/icons/archive.png'
+                    externalGraphic:'./img/icons/archive.png'
                 }
             }),
             new OpenLayers.Rule({
                 elseFilter: true,
                 symbolizer: {
-                    externalGraphic:'http://localhost/culturegrid/img/icons/other.png'
+                    externalGraphic:'./img/icons/other.png'
                 }
             })
             ]);
@@ -273,17 +273,17 @@ $(document).ready(function(){
 
     // Create layers to add
     var layers = [
-    osm = new OpenLayers.Layer.OSM("Simple OSM Map"),
-    gsat = new OpenLayers.Layer.Google("Google Satellite",
-    {
-        type: google.maps.MapTypeId.SATELLITE,
-        numZoomLevels: 22
-    }
-    ),
-    vectors = new OpenLayers.Layer.Vector("Results",{
-        projection: new OpenLayers.Projection("EPSG:4326"),
-        styleMap: CG.getFeatureStyles()
-    })
+        osm = new OpenLayers.Layer.OSM("Simple OSM Map"),
+        gsat = new OpenLayers.Layer.Google("Google Satellite",
+        {
+            type: google.maps.MapTypeId.SATELLITE,
+            numZoomLevels: 22
+        }
+        ),
+        vectors = new OpenLayers.Layer.Vector("Results",{
+            projection: new OpenLayers.Projection("EPSG:4326"),
+            styleMap: CG.getFeatureStyles()
+        })
     ];
 
     // We will need a reference to the vector layer
