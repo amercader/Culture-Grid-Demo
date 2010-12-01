@@ -1,0 +1,30 @@
+body{
+    margin: 0
+}
+
+#map {
+    background-color: #e7e7e7
+}
+
+#form {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 20px;
+    padding: 20px;
+    background-color: red;
+    z-index: 1000
+
+}
+
+.popup {
+    padding: 10px
+}
+
+.popup div{
+    margin: 5px 0;
+}
+
+.popup .name{
+    font-weight: bold
+}
