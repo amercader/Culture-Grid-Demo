@@ -206,6 +206,9 @@ var CG = {
         // Create layers to add
         var layers = [
             osm = new OpenLayers.Layer.OSM("Simple OSM Map"),
+            gsat = new OpenLayers.Layer.Google("Google Satellite",
+                    {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
+            ),
             vectors = new OpenLayers.Layer.Vector("Results",{
                 projection: new OpenLayers.Projection("EPSG:4326"),
                 styleMap: CG.getFeatureStyles()
