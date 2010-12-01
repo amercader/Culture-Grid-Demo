@@ -12,7 +12,8 @@ body{
     left: 0;
     margin: 20px;
     padding: 20px;
-    background-color: red;
+    background-color: white;
+    border: 1px solid #e2e2e2;
     z-index: 1000
 
 }

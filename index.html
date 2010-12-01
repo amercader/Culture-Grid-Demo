@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Demo Culture Grid</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <link href="css/default.css" rel="stylesheet" type="text/css" />
     
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -16,7 +18,23 @@
     <div id="map"></div>
 
     <div id="form">
-        <input id="search" type="button" value="Search"/>
+        Radius
+        <select id="radius">
+            <option value="1">1 miles</option>
+            <option selected value="2">2 miles</option>
+            <option value="5">5 miles</option>
+            <option value="10">10 miles</option>
+            <option value="20">20 miles</option>
+        </select>
+        Nº of results
+        <select id="num_results">
+            <option value="5">5</option>
+            <option selected value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+
+        </select>
     </div>
 
 </body>

@@ -2,9 +2,17 @@
 var CG = {
     map: null,
 
-    vectorLayer: null,
+    featuresLayer: null,
 
-    results: [],
+    selectedFeature: null,
+
+    selectControl: null,
+
+    features: [],
+
+    radius: 2,
+
+    numResults: 10,
 
     // x and y should be in lat/lon
     doRequest: function(x,y){
@@ -15,19 +23,11 @@ var CG = {
         url += "q=dcterms.isPartOf%3AMLAInstitutions";
         url += "&version=2.2";
         url += "&start=0";
-        url += "&rows=100";
         url += "&indent=on";
-        url += "&radius=20";
+        url += "&radius=" + this.radius;
+        url += "&rows=" + this.numResults;
         url += "&qt=geo";
         url += "&sort=geo_distance%20asc";
-        /*
-        url += "&lat=53.3813152288178";
-        url += "&long=-2.4811235692305";
-        */
-        /*
-        url += "&lat=54.99337311367353";
-        url += "&long=-1.613616943359375";
-        */
         url += "&lat=" + y;
         url += "&long=" + x;
 
@@ -73,7 +73,7 @@ var CG = {
 
     mapResults: function(){
         // Get features layer
-        var layer = CG.vectorLayer;
+        var layer = CG.featuresLayer;
 
         // Delete previous features
         if (layer.features.length)
@@ -234,8 +234,6 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
         // Not sure if it's the best way of doing it though
         if (e.target.tagName == "image")
             return false;
-        
-        console.log("Request sent");
 
         var lonlat = this.map.getLonLatFromViewPortPx(e.xy);
         // Transform the coordinates from Spherical Mercator to Lat/lon (WGS84)
@@ -252,6 +250,10 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 
 
 $(document).ready(function(){
+
+    $("#radius").change(function(){ CG.radius = $(this).val() });
+    $("#num_results").change(function(){ CG.numResults = $(this).val() });
+
 
     // Set map div size
     $("#map").width($(window).width());
@@ -287,7 +289,7 @@ $(document).ready(function(){
     ];
 
     // We will need a reference to the vector layer
-    CG.vectorLayer = vectors;
+    CG.featuresLayer = vectors;
 
     // Create a control to allow the selection of features
     CG.selectControl = new OpenLayers.Control.SelectFeature(
