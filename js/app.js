@@ -14,6 +14,8 @@ var CG = {
 
     numResults: 10,
 
+    centerOnResults: true,
+
     // x and y should be in lat/lon
     doRequest: function(x,y){
 
@@ -83,7 +85,8 @@ var CG = {
         layer.addFeatures(CG.features);
 
         // Center map in new features extent
-        CG.map.zoomToExtent(layer.getDataExtent());
+        if (CG.centerOnResults)
+            CG.map.zoomToExtent(layer.getDataExtent());
 
 
     },
@@ -253,6 +256,7 @@ $(document).ready(function(){
 
     $("#radius").change(function(){ CG.radius = $(this).val() });
     $("#num_results").change(function(){ CG.numResults = $(this).val() });
+    $("#recenter").change(function(){ CG.centerOnResults = (this.checked) });
 
 
     // Set map div size
