@@ -134,6 +134,7 @@ var CG = {
 
     onPopupClose: function(event){
         CG.selectControl.unselect(CG.selectedFeature);
+        CG.selectedFeature = null;
     },
 
     onFeatureUnselect: function(event){
@@ -143,6 +144,12 @@ var CG = {
     },
 
     onDragComplete: function(feature,pixel){
+
+        if (CG.selectedFeature){
+            CG.selectControl.unselect(CG.selectedFeature);
+            CG.selectedFeature = null;
+        }
+
         var lonlat = this.map.getLonLatFromViewPortPx(pixel);
 
         // Transform the coordinates from Spherical Mercator to Lat/lon (WGS84)
