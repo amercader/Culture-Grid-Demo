@@ -3,11 +3,13 @@
     <head>
         <title>Demo Culture Grid</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
         <link href="css/default.css" rel="stylesheet" type="text/css" />
+
     </head>
 
     <body>
-
         <div id="form">
             Radius
             <select id="radius">
@@ -27,13 +29,33 @@
             </select>
 
             <div><input id="recenter" type="checkbox" /> Center map on results</div>
+
+            <a href="#" id="show_about" >About / Help</a>
         </div>
+
+        
 
         <div id="loading" class="notifier"><img src="img/load.gif" alt="" /> Loading</div>
         <div id="message" class="notifier"></div>
 
         <div id="map"></div>
 
+        <div id="about" style="display:none">
+            <p>This is a quick demo I built for the <a href="http://www.culturegridhackday.org.uk/" target="_blank">Culture Grid Hack Day</a>. It uses the <a href="http://www.culturegrid.org.uk/use/" target="_blank">Culture Grid API</a> to show the nearest MLA institutions to a given point.</p>
+            <ul>
+                <li>Drag the map to move around, use the mouse wheel to zoom in and out (The map is centered in Newcastle, but you can query anywhere in Britain).</li>
+                <li>Click on the map or drag the marker around to get the results. Clicking on the icons will give you more information.</li>
+            </ul>
+            <strong>Known issues</strong>
+            <ul>
+                <li>Coincident points are not handled, so if two or more institutions are located in the same place, only one will be shown.</li>
+                <li>Tested on Firefox 3.6 and 4, Chrome 7 and IE 8. I'm not sure how older browsers will cope with a lot of markers loaded.</li>
+            </ul>
+            <p>For any comments:</p>
+            <p>Adrià Mercader (<strong>amercadero at gmail.com</strong>) - <a href="http://www.culturegridhackday.org.uk/" target="_blank">http://amercader.net</a></p>
+            <p>Built with <a href="http://jquery.com/" target="_blank">jQuery</a> and <a href="http://openlayers.org/" target="_blank">OpenLayers</a>. Source code available at:</p>
+            <a href="https://github.com/amercader/Culture-Grid-Demo" target="_blank">https://github.com/amercader/Culture-Grid-Demo</a>
+        </div>
 
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
         <script type="text/javascript" src="js/openlayers/OpenLayers.js"></script>

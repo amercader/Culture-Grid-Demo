@@ -1,9 +1,10 @@
 body{
     margin: 0;
-    font-family: sans
+    font-family: sans-serif;
 }
 
 #map {
+    position: absolute;
     background-color: #e7e7e7
 }
 
@@ -69,4 +70,14 @@ body{
 
 .olPopupCloseBox  {
     background: url("../img/close.png") no-repeat scroll 0 0 transparent !important;
+}
+
+
+/* jQuery UI */
+.ui-widget {
+    font-family: sans-serif;
+    font-size: 1em;
+}
+.ui-widget a{
+    color: blue
 }

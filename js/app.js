@@ -36,7 +36,7 @@ var CG = {
 
 
         url = "proxy.php?url="+escape(url);
-        
+
         if ($("#message").is(":visible")) $("#message").hide("slide",{ direction: "up" },1000);
         $("#loading").show("slide",{ direction: "up" },500);
 
@@ -70,7 +70,7 @@ var CG = {
                         )
                     );
 
-              
+
             });
 
             $("#loading").hide("slide",{ direction: "up" },500);
@@ -80,7 +80,7 @@ var CG = {
             else
                 $("#message").html("No results found").show("slide",{ direction: "up" },500);
 
-           
+
         })
 
         return true;
@@ -94,7 +94,7 @@ var CG = {
         if (layer.features.length)
             layer.removeAllFeatures();
 
-        
+
 
         // Add new features to map
         layer.addFeatures(CG.features);
@@ -168,7 +168,7 @@ var CG = {
             graphicWidth:32,
             graphicHeight:37
         });
-        
+
         style.addRules([
             new OpenLayers.Rule({
                 filter: new OpenLayers.Filter.Comparison({
@@ -239,13 +239,21 @@ var CG = {
             ]);
 
         return new OpenLayers.StyleMap(style);
+    },
+
+    showDialog: function(){
+        $("#about").dialog({
+            width:720,
+            height:475,
+            title: "About / Help"
+        });
     }
 
 };
 
 // Custom control to handle clicks on the map
 OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
-    
+
     defaultHandlerOptions: {
         'single': true,
         'double': false,
@@ -315,17 +323,19 @@ $(document).ready(function(){
     $("#recenter").change(function(){
         CG.centerOnResults = (this.checked)
     });
+    $("#show_about").click(function(){
+        CG.showDialog();
+    });
 
 
     // Set element positions
     $("#loading").css("left",$(window).width()/2 - $("#loading").width()/2);
     $("#message").css("left",$(window).width()/2 - $("#message").width()/2);
 
-
-
     // Set map div size
     $("#map").width($(window).width());
     $("#map").height($(window).height());
+
 
 
     // Create a new map
@@ -403,6 +413,7 @@ $(document).ready(function(){
 
     CG.map = map;
 
-
+    // Show About / help
+    CG.showDialog();
 }
 );
