@@ -36,8 +36,10 @@ var CG = {
 
 
         url = "proxy.php?url="+escape(url);
-
+        
+        if ($("#message").is(":visible")) $("#message").hide("slide",{ direction: "up" },1000);
         $("#loading").show("slide",{ direction: "up" },500);
+
 
         $.get(url,function(results){
 
@@ -70,10 +72,15 @@ var CG = {
 
               
             });
+
+            $("#loading").hide("slide",{ direction: "up" },500);
+
             if (CG.features.length)
                 CG.mapResults();
+            else
+                $("#message").html("No results found").show("slide",{ direction: "up" },500);
 
-           $("#loading").hide("slide",{ direction: "up" },500);
+           
         })
 
         return true;
@@ -86,6 +93,8 @@ var CG = {
         // Delete previous features
         if (layer.features.length)
             layer.removeAllFeatures();
+
+        
 
         // Add new features to map
         layer.addFeatures(CG.features);
@@ -300,10 +309,11 @@ $(document).ready(function(){
         CG.centerOnResults = (this.checked)
     });
 
-    // Set map div size
+
+    // Set element positions
     $("#loading").css("left",$(window).width()/2 - $("#loading").width()/2);
-    
-    
+    $("#message").css("left",$(window).width()/2 - $("#message").width()/2);
+
 
 
     // Set map div size
