@@ -8,6 +8,8 @@ var CG = {
 
     selectControl: null,
 
+    clickControl: null,
+
     features: [],
 
     radius: 2,
@@ -15,6 +17,8 @@ var CG = {
     numResults: 10,
 
     centerOnResults: false,
+
+    avoidNextClick: false,
 
     // x and y should be in lat/lon
     doRequest: function(x,y){
@@ -108,6 +112,8 @@ var CG = {
 
     onFeatureSelect: function(event){
 
+        CG.avoidNextClick = true;
+
         var feature = event.feature;
         CG.selectedFeature = feature;
 
@@ -133,6 +139,8 @@ var CG = {
     },
 
     onPopupClose: function(event){
+        CG.avoidNextClick = true;
+        
         CG.selectControl.unselect(CG.selectedFeature);
         CG.selectedFeature = null;
     },
@@ -278,10 +286,12 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 
     trigger: function(e) {
 
-        // Prevent the request when clicking a feature.
+        // Prevent the request when clicking a feature or closing a popup.
         // Not sure if it's the best way of doing it though
-        if (e.target.tagName == "image")
+        if (CG.avoidNextClick){
+            CG.avoidNextClick = false;
             return false;
+        }
 
         var lonlat = this.map.getLonLatFromViewPortPx(e.xy);
 
@@ -394,9 +404,9 @@ $(document).ready(function(){
 
     // Create an instance of the custom control that will handle the clicks
     // on the map
-    var click = new OpenLayers.Control.Click();
-    map.addControl(click);
-    click.activate();
+    CG.clickControl = new OpenLayers.Control.Click();
+    map.addControl(CG.clickControl);
+    CG.clickControl.activate();
 
     // Create a control to drag the marker
     var drag = new OpenLayers.Control.DragFeature(
