@@ -255,6 +255,33 @@ var CG = {
             height:475,
             title: "About / Help"
         });
+    },
+
+    onLocation: function(position){
+
+        // Get location from browser
+        var point = new OpenLayers.LonLat(position.coords.longitude, position.coords.latitude)
+                    .transform(new OpenLayers.Projection("EPSG:4326"),CG.map.getProjectionObject());
+
+        // Add Marker
+        var marker = CG.markerLayer.features[0];
+        if (marker){
+            // Move the existing marker
+            marker.move(lonlat);
+        } else {
+            // Create a new marker
+            marker = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(point.lon, point.lat));
+            CG.markerLayer.addFeatures([marker]);
+        }
+        
+        // Center map
+        CG.map.setCenter(point);
+        
+        // Do request on these coordinates
+        CG.doRequest(position.coords.longitude, position.coords.latitude);
+    },
+
+    onLocationError: function(){
     }
 
 };
@@ -342,6 +369,8 @@ $(document).ready(function(){
     $("#loading").css("left",$(window).width()/2 - $("#loading").width()/2);
     $("#message").css("left",$(window).width()/2 - $("#message").width()/2);
 
+
+
     // Set map div size
     $("#map").width($(window).width());
     $("#map").height($(window).height());
@@ -425,5 +454,13 @@ $(document).ready(function(){
 
     // Show About / help
     CG.showDialog();
+
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(CG.onLocation, CG.onLocationError);
+    } else {
+        $("#message").html("Your browser does not support geolocation").show("slide",{ direction: "up" },500);
+    }
+
 }
 );
