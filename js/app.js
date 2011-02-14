@@ -36,7 +36,7 @@ var CG = {
         url += "&sort=geo_distance%20asc";
         url += "&lat=" + y;
         url += "&long=" + x;
-
+        url += "&wt=json";      //JSON output
 
 
         url = "proxy.php?url="+escape(url);
@@ -44,38 +44,35 @@ var CG = {
         if ($("#message").is(":visible")) $("#message").hide("slide",{ direction: "up" },1000);
         $("#loading").show("slide",{ direction: "up" },500);
 
-
-        $.get(url,function(results){
-
+        $.getJSON(url,function(results){
             CG.features = [];
 
             // Create an array of new features from the results
-            $(results).find("doc").each(function(){
+            if (results && results.response && results.response.docs){
+                var docs = results.response.docs;
+                var doc;
+                for (var i = 0; i < docs.length; i++){
+                    doc = docs[i];                    
+                    CG.features.push(
+                        new OpenLayers.Feature.Vector(
+                            // Geometry: We need to transform Lat/Lon to Mercator
+                            new OpenLayers.Geometry.Point(doc.lng,doc.lat).transform(
+                                new OpenLayers.Projection("EPSG:4326"),
+                                CG.map.getProjectionObject()
+                                ),
+                                // Attributes
+                                {
+                                "name": doc["dc.title"][0],
+                                "address": doc.institution_address,
+                                "type": doc.institution_sector,
+                                "website": doc["oai_is.website"],
+                                "distance": doc.geo_distance
 
-                var x = parseFloat($(this).find("double[name=lng]").text());
-                var y = parseFloat($(this).find("double[name=lat]").text());
-
-                CG.features.push(
-                    new OpenLayers.Feature.Vector(
-                        // Geometry: We need to transform Lat/Lon to Mercator
-                        new OpenLayers.Geometry.Point(x,y).transform(
-                            new OpenLayers.Projection("EPSG:4326"),
-                            CG.map.getProjectionObject()
-                            ),
-                            // Attributes
-                            {
-                            "name": $(this).find("str[name=dc.title]").text(),
-                            "address": $(this).find("str[name=institution_address]").text(),
-                            "type": $(this).find("str[name=institution_sector]").text(),
-                            "website": $(this).find("str[name=oai_is.website]").text(),
-                            "distance": $(this).find("str[name=geo_distance]").text()
-
-                        }
-                        )
-                    );
-
-
-            });
+                            }
+                            )
+                        );
+                }
+            }
 
             $("#loading").hide("slide",{ direction: "up" },500);
 
@@ -122,7 +119,8 @@ var CG = {
         html += "<div class=\"name\">" + feature.attributes.name +"</div>";
         html += "<div class=\"address\">" + feature.attributes.address+"</div>"
 
-        html += "<div class=\"website\"><a href=\"" + feature.attributes.website + "\" target=\"_blank\">" + feature.attributes.website +"</a></div>"
+        if (feature.attributes.website)
+            html += "<div class=\"website\"><a href=\"" + feature.attributes.website + "\" target=\"_blank\">" + feature.attributes.website +"</a></div>"
         html += "<div class=\"distance\">Distance: " + parseFloat(feature.attributes.distance).toFixed(2)+" miles</div>"
         html += "</div>"
 
