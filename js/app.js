@@ -87,6 +87,78 @@ var CG = {
         return true;
     },
 
+    searchCollection: function(){
+        var collection = $("#current_collection").val().replace(" ","%20","g");
+        var text = $("#collection_search").val().replace(" ","%20","g");
+
+        var url = "http://culturegrid.org.uk/index/select/?";
+        url += "q=dcterms.isPartOf_Name%3A\"" + collection +"\"%20AND%20text%3A" + text;
+        url += "&version=2.2";
+        url += "&start=0";
+        url += "&rows=5";
+        url += "&wt=json";      //JSON output
+
+        url = "proxy.php?url="+escape(url);
+
+        if ($("#message").is(":visible")) $("#message").hide("slide",{ direction: "up" },1000);
+        $("#loading").show("slide",{ direction: "up" },500);
+
+        $.getJSON(url,function(results){
+
+            if (results && results.response && results.response.docs){
+                var docs = results.response.docs;
+                var doc;
+                if (docs.length == 0){
+                    $("#message").html("No results found").show("slide",{ direction: "up" },500);
+                    return false;
+                }
+                var div = $("<div></div>");
+                var header = $("<div></div>");
+
+                header.attr("class","results-header");
+                header.html("Results found: "+results.response.numFound);
+
+                div.append(header);
+
+                for (var i = 0; i < docs.length; i++){
+                    doc = docs[i];
+                    result = $("<div></div>");
+                    result.attr("class","results-item");
+                    if (doc["pndsterms.thumbnail"]){
+                        img = $("<img />");
+                        img.attr({"src":doc["pndsterms.thumbnail"]
+                                ,"class":"results-img"});
+                        divimg = $("<div></div>");
+                        divimg.append(img)
+                        result.append(divimg);
+                    }
+
+                    title = $("<div></div>");
+                    title.html(doc["dc.title"][0]);
+                    title.attr("class","results-title");
+                    result.append(title)
+
+                    url = $("<div></div>");
+                    a = $("<a />")
+                    a.attr({"href":doc["dc.related.link"],"target":"_blank"})
+                    a.html("View resource")
+                    url.attr("class","results-url");
+                    url.append(a);
+                    result.append(url);
+
+
+                    div.append(result)
+                }
+                div.dialog({
+                    "title":"Results",
+                    "width":500
+                })
+
+            }
+            $("#loading").hide("slide",{ direction: "up" },500);
+        });
+    },
+
     mapResults: function(){
         // Get features layer
         var layer = CG.featuresLayer;
@@ -123,6 +195,17 @@ var CG = {
             html += "<div class=\"website\"><a href=\"" + feature.attributes.website + "\" target=\"_blank\">" + feature.attributes.website +"</a></div>"
         html += "<div class=\"distance\">Distance: " + parseFloat(feature.attributes.distance).toFixed(2)+" miles</div>"
         html += "</div>"
+
+        if (institutions[feature.attributes.name]){
+            html += "<div class=\"collections\">"
+            html += "<div style=\"font-weight: bold\">Search in the collections:</div>"
+            html += "<form><input type=\"text\" id=\"collection_search\"/> <input type=\"button\" onclick=\"CG.searchCollection()\" value=\"Search\" />"
+            html += "<input type=\"hidden\" id=\"current_collection\" value=\"" + institutions[feature.attributes.name].collections[0] + "\">"
+            html += "</form>"
+            html += "</div>"
+        }
+
+
 
         var popup = new OpenLayers.Popup.FramedCloud("Feature Info",
             feature.geometry.getBounds().getCenterLonLat(),
@@ -453,12 +536,12 @@ $(document).ready(function(){
     // Show About / help
     CG.showDialog();
 
-
+/*
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(CG.onLocation, CG.onLocationError);
     } else {
         $("#message").html("Your browser does not support geolocation").show("slide",{ direction: "up" },500);
     }
-
+*/
 }
 );

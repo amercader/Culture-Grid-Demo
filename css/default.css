@@ -65,6 +65,33 @@ body{
     margin-top: 30px
 }
 
+.collections{
+    background-color: #f9feb5;
+    border: 1px solid #e3e3e3;
+    padding: 10px;
+}
+
+.results-header{
+    font-weight: bold;
+}
+
+.results-item{
+    border-top: 1px solid #E3E3E3;
+    clear: both;
+    padding: 5px 0;
+
+}
+
+.results-item div{
+    float: left;
+    display: inline: block
+}
+
+.results-title{
+    font-style: italic;
+}
+
+
 
 /* OpenLayers classes */
 
