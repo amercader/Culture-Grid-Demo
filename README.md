@@ -13,6 +13,19 @@ in the same place, only one will be shown.
 * Tested on Firefox 3.6 and 4, Chrome 7 and IE 8. I'm not sure how older
 browsers will cope with a lot of markers loaded.
 
+**TODO**
+
+Some nice things that could be improved or added:
+
+* Handle coincident points.
+* Show an special icon for institutions where collections can be searched.
+* Page results.
+* Choose between different collections on a given institution.
+* Add locators by address, post code, etc.
+* Permalink.
+* API to embed a map with cultural institutions on any website.
+* ...
+
 For any comments:
 
 Adrià Mercader (**amercadero at gmail.com**) - [http://amercader.net]()
