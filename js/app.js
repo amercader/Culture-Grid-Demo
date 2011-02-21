@@ -88,8 +88,8 @@ var CG = {
     },
 
     searchCollection: function(){
-        var collection = $("#current_collection").val().replace(" ","%20","g");
-        var text = $("#collection_search").val().replace(" ","%20","g");
+        var collection = escape($("#current_collection").val());
+        var text = escape($("#collection_search").val());
 
 
         var url = "http://culturegrid.org.uk/index/select/?";
