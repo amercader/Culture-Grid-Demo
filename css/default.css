@@ -82,16 +82,37 @@ body{
 
 }
 
-.results-item div{
+.results-layout{
     float: left;
-    display: inline: block
+    display: inline: block;
+
 }
+
+.results-divimg{
+    width: 30%;
+}
+
+.results-divright{
+    margin-left: 10px;
+    width: 65%;
+}
+
 
 .results-title{
     font-style: italic;
+    margin-bottom: 5px ;
 }
 
+.results-noimg{
+    height: 60px;
+    background: url("../img/nopic.png") no-repeat scroll center center transparent;
+    border: 1px solid #E3E3E3;
+}
 
+.results-img{
+    width: 140px;
+    height: 80px;
+}
 
 /* OpenLayers classes */
 

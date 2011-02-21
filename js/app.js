@@ -123,31 +123,40 @@ var CG = {
                 for (var i = 0; i < docs.length; i++){
                     doc = docs[i];
                     result = $("<div></div>");
-                    result.attr("class","results-item");
+                    result.addClass("results-item");
+
+                    divimg = $("<div></div>");
+                    divimg.addClass("results-layout results-divimg");
                     if (doc["pndsterms.thumbnail"]){
                         img = $("<img />");
                         img.attr({"src":doc["pndsterms.thumbnail"]
                                 ,"class":"results-img"});
-                        divimg = $("<div></div>");
                         divimg.append(img)
-                        result.append(divimg);
+                    } else {
+                        divimg.addClass("results-noimg");
                     }
+
+                    result.append(divimg);
+
+                    divright = $("<div></div>");
+                    divright.addClass("results-layout results-divright");
 
                     title = $("<div></div>");
                     title.html(doc["dc.title"][0]);
-                    title.attr("class","results-title");
-                    result.append(title)
+                    title.addClass("results-title");
+                    divright.append(title)
 
                     url = $("<div></div>");
                     a = $("<a />")
                     a.attr({"href":doc["dc.related.link"],"target":"_blank"})
                     a.html("View resource")
-                    url.attr("class","results-url");
+                    url.addClass("results-url");
                     url.append(a);
-                    result.append(url);
+                    divright.append(url);
 
+                    result.append(divright);
 
-                    div.append(result)
+                    div.append(result);
                 }
                 div.dialog({
                     "title":"Results",
