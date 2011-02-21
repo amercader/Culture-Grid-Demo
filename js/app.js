@@ -91,6 +91,7 @@ var CG = {
         var collection = $("#current_collection").val().replace(" ","%20","g");
         var text = $("#collection_search").val().replace(" ","%20","g");
 
+
         var url = "http://culturegrid.org.uk/index/select/?";
         url += "q=dcterms.isPartOf_Name%3A\"" + collection +"\"%20AND%20text%3A" + text;
         url += "&version=2.2";
@@ -116,7 +117,7 @@ var CG = {
                 var header = $("<div></div>");
 
                 header.attr("class","results-header");
-                header.html("Results found: "+results.response.numFound);
+                header.html("Results found: "+results.response.numFound + " (Only the first five shown)");
 
                 div.append(header);
 
@@ -158,6 +159,7 @@ var CG = {
 
                     div.append(result);
                 }
+
                 div.dialog({
                     "title":"Results",
                     "width":500
@@ -207,7 +209,7 @@ var CG = {
 
         if (institutions[feature.attributes.name]){
             html += "<div class=\"collections\">"
-            html += "<div style=\"font-weight: bold\">Search in the collections:</div>"
+            html += "<div style=\"font-weight: bold\">Search the '" + institutions[feature.attributes.name].collections[0] + "' collection:</div>"
             html += "<form><input type=\"text\" id=\"collection_search\"/> <input type=\"button\" onclick=\"CG.searchCollection()\" value=\"Search\" />"
             html += "<input type=\"hidden\" id=\"current_collection\" value=\"" + institutions[feature.attributes.name].collections[0] + "\">"
             html += "</form>"
