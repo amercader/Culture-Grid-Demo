@@ -547,12 +547,12 @@ $(document).ready(function(){
     // Show About / help
     CG.showDialog();
 
-/*
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(CG.onLocation, CG.onLocationError);
     } else {
         $("#message").html("Your browser does not support geolocation").show("slide",{ direction: "up" },500);
     }
-*/
+
 }
 );
